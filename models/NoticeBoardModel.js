@@ -16,7 +16,7 @@ Notice.init(
     },
 
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
     },
 
     likes: {

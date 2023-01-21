@@ -8,12 +8,106 @@ sequelize.sync().then(() =>{
     console.log("DB is running");
 })
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Notice:
+ *          type: object
+ *          required:
+ *              - author
+ *              - message
+ *              
+ *          properties:
+ *              id:
+ *                 type: INTEGER
+ *                 description: The auto generated id
+ *              author:
+ *                  type: STRING
+ *                  description: The author's name
+ *              message:
+ *                  type: STRING
+ *                  description: Notice message 
+ *              date:
+ *                  type: STRING
+ *                  description: Date of the notice created
+ *              likes:
+ *                  type: INTEGER
+ *                  description: like count for notice
+ *          
+ *          example:
+ *              author: Harsh,
+ *              message: This is sample text
+ *              date: 10 September, 2022
+ *              likes: 1
+ */
+
+/**
+ * @swagger
+ * 
+ * /api/notice:
+ *  post:
+ *      summary: Creates a Notice
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Notice'
+ *      responses:
+ *        201:
+ *          description: Notice is successfully created
+ *        400:
+ *          description: Author or Message is missing
+ *        500:
+ *          description: Internal server error
+ * 
+ */
+ 
+ /**
+ * @swagger
+ * /api/notice:
+ *  get:
+ *      summary: Gets All the Notice list created sorted by date
+ *      requestBody:
+ *          required: false
+ *      responses:
+ *          200:
+ *              description: Successfull Response
+ *          404:
+ *              description: No Notice found
+ *          500:
+ *              description: Internal server error
+ *         
+ *          
+ */
+
+ /**
+ * @swagger
+ * /api/notice/:id:
+ *  get:
+ *      summary: Gets the Notice with specific id
+ *      requestBody:
+ *          required: false
+ *      responses:
+ *          200:
+ *              description: Successfull Response
+ *          404:
+ *              description: No Notice found with :id
+ *          500:
+ *              description: Internal server error
+ *         
+ *          
+ */
+
+
+
 
 // Get all the Notices
 router.get("/notice", async(req, res) =>{
     const allNotice = await Notice.findAll({
         order:[
-            ['date']
+            ['date', 'DESC']
         ]
     })
     if(allNotice.length != 0) return res.status(200).send(allNotice)
@@ -96,7 +190,7 @@ router.delete("/notice/:id", async(req,res) =>{
     if(!notice) return res.status(404).send({err:`Notice with id:${id} not found`});
     const deleted = await Notice.destroy({
         where:{
-            id
+            id 
         }
     })
     if(deleted) res.status(200).send({message:`Notice with id:${req.params.id} deleted successfully`})
