@@ -31,6 +31,9 @@ app.use(express.json())
 // middleware to accept body 
 app.use(express.urlencoded({extended:true}))
 
+app.get("/", (req, res)=>{
+    res.send("Server is running")
+})
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(spec))
 app.use("/api", noticeBoardRoute)
 
